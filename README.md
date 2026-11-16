@@ -1,5 +1,7 @@
 # AI Video Studio
 
+https://github.com/user-attachments/assets/9c54df03-c753-406b-8c6f-924aacbe9bcd
+
 <video src="examples/fox-wan-raw-832x480.mp4" controls muted width="100%"></video>
 
 *Raw output of the motion step, 832×480, unedited.*
