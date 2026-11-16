@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Video Studio</title>
+<style>
+  :root { --bg:#f6f5f2; --panel:#ffffff; --ink:#1c1b19; --muted:#6d6a63; --line:#dedbd3; --accent:#b4532a; --accent-ink:#fff; --ok:#2f7d4f; --bad:#b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#161513; --panel:#201f1c; --ink:#ece9e2; --muted:#9d998f; --line:#35332e; --accent:#e0794c; --accent-ink:#1a120d; --ok:#6fcf97; --bad:#f2847c; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  header { padding:18px 24px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; letter-spacing:.01em; }
+  header span { color:var(--muted); font-size:13px; }
+  main { display:grid; grid-template-columns:minmax(300px, 400px) 1fr; gap:20px; padding:20px 24px; max-width:1400px; margin:0 auto; }
+  @media (max-width: 860px) { main { grid-template-columns:1fr; padding:16px; } }
+  section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; min-width:0; }
+  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 12px; font-weight:600; }
+  label { display:block; font-size:13px; color:var(--muted); margin:10px 0 4px; }
+  textarea, input[type=text], input[type=number], select { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--bg); color:var(--ink); font:inherit; }
+  textarea { min-height:130px; resize:vertical; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { flex:1; border:0; background:transparent; color:var(--muted); padding:7px; font:inherit; cursor:pointer; }
+  .seg button.on { background:var(--ink); color:var(--bg); }
+  button.primary { margin-top:14px; width:100%; padding:11px; border:0; border-radius:7px; background:var(--accent); color:var(--accent-ink); font:600 15px/1 inherit; cursor:pointer; }
+  button.primary:disabled { opacity:.45; cursor:default; }
+  button.ghost { border:1px solid var(--line); background:transparent; color:var(--ink); border-radius:7px; padding:7px 12px; font:inherit; cursor:pointer; }
+  .check { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:14px; }
+  pre { background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:10px; font:12px/1.45 ui-monospace, Menlo, monospace; max-height:220px; overflow:auto; white-space:pre-wrap; margin:10px 0 0; }
+  .status { font-size:13px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--muted); margin-right:6px; }
+  .running .dot { background:var(--accent); animation:pulse 1.2s infinite; } .done .dot { background:var(--ok); } .failed .dot { background:var(--bad); }
+  @keyframes pulse { 50% { opacity:.3; } }
+  .projects { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .projects button { border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:999px; padding:5px 12px; font:13px/1.3 inherit; cursor:pointer; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .projects button.on { border-color:var(--accent); color:var(--accent); }
+  video { width:100%; max-height:62vh; background:#000; border-radius:8px; display:block; }
+  .facts a, a { color:var(--accent); }
+  .facts { display:flex; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:13px; margin:10px 0 4px; font-variant-numeric:tabular-nums; }
+  .shot { display:grid; grid-template-columns:150px 1fr; gap:12px; padding:12px 0; border-top:1px solid var(--line); }
+  @media (max-width: 560px) { .shot { grid-template-columns:1fr; } }
+  .shot img { width:100%; border-radius:6px; background:var(--bg); aspect-ratio:16/9; object-fit:cover; }
+  .shot textarea { min-height:54px; font-size:13px; }
+  .shot .meta { font-size:12px; color:var(--muted); display:flex; gap:10px; align-items:center; margin-top:4px; flex-wrap:wrap; }
+  .shot select { width:auto; padding:3px 6px; font-size:12px; }
+  .empty { color:var(--muted); padding:30px 0; text-align:center; }
+  .hint { font-size:12px; color:var(--muted); margin-top:4px; }
+  .refs { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .ref { display:grid; grid-template-columns:64px 1fr auto; gap:8px; align-items:start; border:1px solid var(--line); border-radius:8px; padding:6px; background:var(--bg); }
+  .ref img { width:64px; height:64px; object-fit:cover; border-radius:6px; }
+  .ref input, .ref select { padding:4px 6px; font-size:13px; }
+  .ref .f { display:grid; grid-template-columns:110px 1fr; gap:6px; }
+  .ref .f input.d { grid-column:1 / span 2; }
+  .ref button { border:0; background:transparent; color:var(--muted); font-size:18px; cursor:pointer; line-height:1; }
+  .filebtn { display:inline-block; border:1px dashed var(--line); border-radius:7px; padding:8px 12px; cursor:pointer; color:var(--ink); font-size:13px; margin-top:6px; }
+  .filebtn input { display:none; }
+  .gallery { display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 4px; }
+  .gallery figure { margin:0; width:96px; font-size:12px; color:var(--muted); position:relative; }
+  .gallery img { width:96px; height:96px; object-fit:cover; border-radius:6px; display:block; }
+  .gallery figcaption { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gallery button { position:absolute; top:2px; right:2px; border:0; border-radius:50%; width:22px; height:22px; background:rgba(0,0,0,.6); color:#fff; cursor:pointer; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; }
+  .chips label { margin:0; display:flex; align-items:center; gap:4px; border:1px solid var(--line); border-radius:999px; padding:1px 8px; font-size:12px; color:var(--ink); cursor:pointer; }
+</style>
+</head>
+<body>
+<header><h1>AI Video Studio</h1><span>script or prompt → narrated, edited video · runs entirely on this Mac</span></header>
+<main>
+  <div>
+    <section>
+      <h2>New video</h2>
+      <div class="seg" id="mode"><button data-v="prompt" class="on">From an idea</button><button data-v="script">From my script</button></div>
+      <label for="text" id="textLabel">What should the video be about?</label>
+      <textarea id="text" placeholder="e.g. Why octopuses are the most alien intelligence on Earth"></textarea>
+      <div class="row">
+        <div><label for="lang">Narration language</label>
+          <select id="lang"><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="it">Italiano</option><option value="pt">Português</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="tr">Türkçe</option><option value="sv">Svenska</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh">中文</option></select></div>
+        <div id="secondsBox"><label for="seconds">Length (seconds)</label><input type="number" id="seconds" value="40" min="10" max="300" step="5"></div>
+      </div>
+      <div class="row">
+        <div><label for="aspect">Format</label><select id="aspect"><option value="16:9">16:9 landscape</option><option value="9:16">9:16 vertical</option><option value="1:1">1:1 square</option></select></div>
+        <div><label for="music">Music</label><select id="music"><option value="calm">Calm</option><option value="wonder">Wonder</option><option value="uplifting">Uplifting</option><option value="dark">Dark</option><option value="none">None</option></select></div>
+      </div>
+      <div class="row">
+        <div><label for="captions">Captions</label><select id="captions"><option value="burn">In picture</option><option value="srt">Subtitle file only</option><option value="off">Off</option></select></div>
+        <div><label for="voice">Voice (English)</label><select id="voice"><option value="">Default</option><option value="af_heart">Heart (US, f)</option><option value="af_bella">Bella (US, f)</option><option value="am_michael">Michael (US, m)</option><option value="am_fenrir">Fenrir (US, m)</option><option value="bf_emma">Emma (UK, f)</option><option value="bm_george">George (UK, m)</option></select></div>
+      </div>
+      <label for="motion">Motion</label>
+      <select id="motion">
+        <option value="wan">AI animation — people and things really move (slow)</option>
+        <option value="parallax">2.5D camera over still images (fast)</option>
+        <option value="camera">Flat zoom and pan (fastest)</option>
+      </select>
+      <div class="hint" id="motionHint"></div>
+      <div class="row">
+        <div><label for="characters">Speaking characters</label><input type="number" id="characters" value="0" min="0" max="12" step="1"></div>
+        <div><label for="lipsync">Lip-sync</label><select id="lipsync"><option value="auto">On (if installed)</option><option value="off">Off</option></select></div>
+      </div>
+      <div class="hint" id="charHint">0 = one narrator voice. 1 or more = a dialogue: characters you don't upload are invented (name, look and voice). A script with lines like “Anna: Hallo!” becomes a dialogue automatically.</div>
+      <label class="check" id="narratorBox" hidden><input type="checkbox" id="narrator"> Also an off-screen narrator</label>
+      <label for="style">Visual style (optional)</label>
+      <input type="text" id="style" placeholder="e.g. watercolor illustration, soft pastel palette">
+      <label>Your images (optional): people, objects, places</label>
+      <div class="hint">Use the image's name in your script or idea (e.g. “Anna walks into the kitchen”) — those scenes then show exactly this person or place.</div>
+      <div class="refs" id="newRefs"></div>
+      <label class="filebtn">+ Add images<input type="file" id="newRefFile" accept="image/*,.heic,.heif" multiple></label>
+      <label class="check" id="consentBox" hidden><input type="checkbox" id="consent"> The people in these photos agreed to appear in this video.</label>
+      <label class="check"><input type="checkbox" id="draft"> Draft quality (faster, 720p)</label>
+      <button class="primary" id="go">Create video</button>
+    </section>
+    <section style="margin-top:20px">
+      <div class="status" id="status"><span><span class="dot"></span><span id="statusText">Idle</span></span><button class="ghost" id="cancel" hidden>Cancel</button></div>
+      <pre id="log" hidden></pre>
+    </section>
+  </div>
+  <section>
+    <h2>Projects</h2>
+    <div class="projects" id="projects"></div>
+    <div id="viewer"><div class="empty">No videos yet. Create one on the left.</div></div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let mode = "prompt", current = null, lastState = "idle", editing = false;
+const MOTIONS = ["push_in","pull_out","pan_left","pan_right","pan_up","pan_down","static"];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+$("mode").addEventListener("click", e => {
+  if (!e.target.dataset.v) return;
+  mode = e.target.dataset.v;
+  [...$("mode").children].forEach(b => b.classList.toggle("on", b === e.target));
+  $("textLabel").textContent = mode === "prompt" ? "What should the video be about?" : "Narration script (spoken word for word)";
+  $("secondsBox").style.visibility = mode === "prompt" ? "visible" : "hidden";
+});
+
+async function api(path, body) {
+  const r = await fetch(path, body ? {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)} : {});
+  return r.json();
+}
+const options = () => ({aspect:$("aspect").value, music:$("music").value, captions:$("captions").value, voice:$("voice").value, draft:$("draft").checked, motion:$("motion").value, lipsync:$("lipsync").value});
+const KINDS = [["person","Person"],["object","Object"],["background","Place / background"]];
+const ANIMATE = [["","Same as all scenes"],["wan","AI animation"],["parallax","2.5D camera"],["camera","Flat camera"]];
+const PROJECT_MOTION = [["wan","AI animation — people and things really move (slow)"],["parallax","2.5D camera over still images (fast)"],["camera","Flat zoom and pan (fastest)"]];
+
+async function upload(file) {
+  const r = await fetch("/api/upload", {method:"POST", headers:{"X-Filename": encodeURIComponent(file.name)}, body:file});
+  return r.json();
+}
+
+// ---- images attached to a new video
+let newRefs = [];
+function drawNewRefs() {
+  const box = $("newRefs");
+  box.innerHTML = newRefs.map((r, i) => `<div class="ref" data-i="${i}"><img src="${r.url}" alt="">
+    <div class="f"><select class="k">${KINDS.map(([v, l]) => `<option value="${v}" ${v === r.kind ? "selected" : ""}>${l}</option>`).join("")}</select>
+    <input type="text" class="nm" placeholder="Name used in the script, e.g. Anna" value="${esc(r.name)}">
+    <input type="text" class="d" placeholder="Short description (optional), e.g. woman in her thirties, red coat" value="${esc(r.description)}">
+    ${r.kind === "person" ? `<input type="text" class="d vo" placeholder="Voice (optional, for dialogues), e.g. deep calm male voice, slow" value="${esc(r.voice || "")}">` : ""}</div>
+    <button title="Remove" aria-label="Remove image">×</button></div>`).join("");
+  box.querySelectorAll(".ref").forEach(el => {
+    const r = newRefs[+el.dataset.i];
+    el.querySelector(".k").onchange = e => { r.kind = e.target.value; drawNewRefs(); };
+    el.querySelector(".nm").oninput = e => { r.name = e.target.value; };
+    el.querySelector(".d").oninput = e => { r.description = e.target.value; };
+    const vo = el.querySelector(".vo"); if (vo) vo.oninput = e => { r.voice = e.target.value; };
+    el.querySelector("button").onclick = () => { newRefs.splice(+el.dataset.i, 1); drawNewRefs(); };
+  });
+  $("consentBox").hidden = !newRefs.some(r => r.kind === "person");
+}
+$("newRefFile").addEventListener("change", async e => {
+  for (const f of e.target.files) {
+    const res = await upload(f);
+    if (res.error) { alert(`${f.name}: ${res.error}`); continue; }
+    newRefs.push({token:res.token, url:res.url, kind:"person", name:res.name, description:""});
+    drawNewRefs();
+  }
+  e.target.value = "";
+});
+
+$("characters").addEventListener("input", () => { $("narratorBox").hidden = !(+$("characters").value > 0); motionHint(); });
+function motionHint() {
+  const dialogue = +$("characters").value > 0;
+  const m = $("motion").value, shots = Math.max(2, Math.round((mode === "prompt" ? +$("seconds").value : 40) / (dialogue ? 3.5 : 5)));
+  $("motionHint").textContent = m === "wan"
+    ? `Every scene is animated with Wan 2.2: about 10 minutes per scene on this Mac (a ${mode === "prompt" ? $("seconds").value + "-second" : "typical"} video has ~${shots} scenes ≈ ${shots * 10} min). Close other heavy apps. A scene that fails falls back to the 2.5D camera.`
+    : "Takes a few minutes in total.";
+  if (dialogue && $("lipsync").value === "auto") $("motionHint").textContent += " Lip-sync adds about 6 minutes per second of each spoken scene (a 4-second line ≈ 25 min).";
+}
+$("lipsync").addEventListener("input", motionHint);
+["motion","seconds"].forEach(id => $(id).addEventListener("input", motionHint));
+$("mode").addEventListener("click", motionHint);
+motionHint();
+
+$("go").addEventListener("click", async () => {
+  const refs = newRefs.map(r => ({token:r.token, kind:r.kind, name:r.name.trim(), description:r.description, voice:r.voice || "", consent:$("consent").checked}));
+  if (refs.some(r => !r.name)) { alert("Please give every image a name (and use it in your script or idea)."); return; }
+  if (refs.some(r => r.kind === "person") && !$("consent").checked) { alert("Please confirm that the people in the photos agreed to appear in the video."); return; }
+  const res = await api("/api/make", {mode, text:$("text").value, lang:$("lang").value, seconds:+$("seconds").value, style:$("style").value, references:refs,
+    characters:+$("characters").value || 0, narrator:$("narrator").checked, ...options()});
+  if (res.error) { alert(res.error); return; }
+  newRefs = []; drawNewRefs();
+  current = res.name; poll();
+});
+$("cancel").addEventListener("click", () => api("/api/cancel", {}));
+
+function showJob(job) {
+  const st = $("status"); st.className = "status " + job.state;
+  const labels = {idle:"Idle", running:`Rendering “${job.name}” · ${job.elapsed ?? 0}s`, done:`Finished “${job.name}”`, failed:`Failed “${job.name}” — see log`};
+  $("statusText").textContent = labels[job.state];
+  $("cancel").hidden = job.state !== "running"; $("go").disabled = job.state === "running";
+  $("log").hidden = !job.log; $("log").textContent = job.log || "";
+  if (job.state === "running") $("log").scrollTop = $("log").scrollHeight;
+}
+
+async function poll() {
+  const data = await api("/api/projects");
+  showJob(data.job);
+  const box = $("projects"); box.innerHTML = "";
+  if (!current && data.projects.length) current = data.projects[0].name;
+  for (const p of data.projects) {
+    const b = document.createElement("button");
+    b.textContent = p.title + (p.rendered ? "" : " (not rendered)"); b.title = p.name;
+    b.className = p.name === current ? "on" : "";
+    b.onclick = () => { current = p.name; editing = false; poll(); loadProject(true); };
+    box.appendChild(b);
+  }
+  const finished = lastState === "running" && data.job.state !== "running";
+  if (finished || $("viewer").dataset.name !== current) loadProject(true);
+  lastState = data.job.state;
+}
+
+async function loadProject(force) {
+  if (!current || (editing && !force)) return;
+  const d = await api("/api/project/" + current);
+  const v = $("viewer");
+  if (d.error) { return; }
+  v.dataset.name = current;
+  const sb = d.project.storyboard, rep = d.report;
+  let html = "";
+  if (rep) {
+    const ver = rep.verification;
+    const first = d.frames[sb.shots[0].id];
+    html += `<video controls preload="metadata" ${first ? `poster="/media/${current}/frames/${first}"` : ""} src="/media/${current}/final.mp4?t=${Date.now()}"></video>
+      <div class="facts"><span>${rep.video.width}×${rep.video.height} · ${rep.duration_s.toFixed(1)}s</span><span>${rep.loudness.output_lufs.toFixed(1)} LUFS</span>
+      <span>rendered in ${Math.round(rep.total_seconds)}s</span>${ver ? `<span>sync ±${ver.max_abs_sync_offset_ms} ms</span>` : ""}
+      <a href="/media/${current}/final.mp4" download="${current}.mp4">Download MP4</a><a href="/media/${current}/captions.srt" download="${current}.srt">Subtitles</a></div>`;
+  } else html += `<div class="empty">Not rendered yet.</div>`;
+  html += `<label>Visual style</label><input type="text" id="edStyle" value="${esc(sb.style)}">`;
+  // project-wide motion and lip-sync (projects made before Wan became the default still say "parallax" here)
+  const st = d.project.settings || {}, hasCast = (sb.cast || []).length > 0;
+  html += `<div class="row"><div><label for="edMotion">Motion for all scenes</label><select id="edMotion">${PROJECT_MOTION.map(([v, l]) =>
+      `<option value="${v}" ${v === (st.motion || "wan") ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+    ${hasCast ? `<div><label for="edLipsync">Lip-sync</label><select id="edLipsync"><option value="auto" ${st.lipsync !== "off" ? "selected" : ""}>On (if installed)</option><option value="off" ${st.lipsync === "off" ? "selected" : ""}>Off</option></select></div>` : ""}</div>
+    <div class="hint">A scene's own motion choice below overrides this.</div>`;
+  const refs = sb.references || [];
+  const kindLabel = Object.fromEntries(KINDS);
+  html += `<label>Images used in this video</label><div class="gallery">${refs.map(r => `<figure><img src="/media/${current}/${esc(r.image)}" alt="${esc(r.name)}">
+      <figcaption title="${esc(r.name)} · ${esc(kindLabel[r.kind] || r.kind)}">${esc(r.name)}</figcaption><figcaption>${esc(kindLabel[r.kind] || r.kind)}</figcaption>
+      <button data-rid="${esc(r.id)}" title="Remove from project" aria-label="Remove ${esc(r.name)}">×</button></figure>`).join("") || `<span class="hint">None yet.</span>`}</div>
+    <div class="ref" style="grid-template-columns:1fr auto"><div class="f"><select id="addKind">${KINDS.map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select>
+      <input type="text" id="addName" placeholder="Name, e.g. Anna"><input type="text" class="d" id="addDesc" placeholder="Short description (optional)"></div>
+      <label class="filebtn" style="margin:0">+ Add image<input type="file" id="addFile" accept="image/*,.heic,.heif"></label></div>
+    <label class="check"><input type="checkbox" id="addConsent"> The person in the photo agreed to appear in this video.</label>
+    <div class="hint">Tick an image under a scene to put it into that scene. Changed scenes get new keyframes and new animation.</div>`;
+  const cast = sb.cast || [];
+  const refImg = Object.fromEntries(refs.map(r => [r.id, r.image]));
+  if (cast.length) {
+    html += `<label>Characters</label><div class="refs" id="castBox">${cast.map(c => `<div class="ref" data-cid="${esc(c.id)}">
+      ${c.ref && refImg[c.ref] ? `<img src="/media/${current}/${esc(refImg[c.ref])}" alt="${esc(c.name)}">` : `<div></div>`}
+      <div class="f"><b style="align-self:center">${esc(c.name)}</b><span class="hint">${c.generated ? "invented" : "given"}${c.kokoro_voice ? " · voice " + esc(c.kokoro_voice) : ""}</span>
+        <input type="text" class="d lk" placeholder="Look (English): face, hair, clothing" value="${esc(c.look || "")}">
+        <input type="text" class="d vc" placeholder="Voice: e.g. deep calm male voice, slow" value="${esc(c.voice || "")}">
+        ${c.voice_design_sample || c.voice_sample ? `<audio controls preload="none" style="grid-column:1 / span 2;width:100%;height:32px" src="/media/${current}/${esc(c.voice_sample || c.voice_design_sample)}"></audio>` : ""}</div><span></span></div>`).join("")}</div>
+      <div class="hint">Changing a look draws a new portrait (for invented characters); changing a voice creates a new voice and re-speaks that character's lines.</div>`;
+  }
+  const SPEAKERS = [["narrator", "Narrator (off screen)"], ...cast.map(c => [c.id, c.name])];
+  for (const s of sb.shots) {
+    const img = d.frames[s.id] ? `<img loading="lazy" src="/media/${current}/frames/${d.frames[s.id]}" alt="Keyframe ${esc(s.id)}">` : `<div></div>`;
+    const used = rep ? (rep.shots.find(x => x.id === s.id) || {}).motion_backend : null;
+    const chips = refs.length ? `<div class="chips">${refs.map(r => `<label><input type="checkbox" class="r" value="${esc(r.id)}" ${(s.refs || []).includes(r.id) ? "checked" : ""}>${esc(r.name)}</label>`).join("")}</div>` : "";
+    html += `<div class="shot" data-id="${esc(s.id)}">${img}<div>
+      <textarea class="n" aria-label="Narration ${esc(s.id)}">${esc(s.narration)}</textarea>
+      <textarea class="v" aria-label="Visual ${esc(s.id)}">${esc(s.visual)}</textarea>
+      <div class="meta"><span>${esc(s.id)}</span><select class="m" aria-label="Camera move ${esc(s.id)}">${MOTIONS.map(m => `<option ${m === s.motion ? "selected" : ""}>${m}</option>`).join("")}</select>
+      <select class="a" aria-label="Motion type ${esc(s.id)}">${ANIMATE.map(([val, l]) => `<option value="${val}" ${val === (s.animate || "") ? "selected" : ""}>${l}</option>`).join("")}</select>
+      ${used ? `<span>last render: ${esc(used)}</span>` : ""}</div>
+      ${cast.length ? `<div class="meta"><select class="sp" aria-label="Speaker ${esc(s.id)}">${SPEAKERS.map(([v, l]) => `<option value="${esc(v)}" ${v === (s.speaker || "narrator") ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
+        <label style="margin:0;display:flex;gap:4px;align-items:center"><input type="checkbox" class="os" ${s.on_screen !== false && (s.speaker || "narrator") !== "narrator" ? "checked" : ""}> speaks on screen (lip-sync)</label></div>` : ""}${chips}</div></div>`;
+  }
+  html += `<button class="primary" id="rerender">Save changes and re-render</button>`;
+  v.innerHTML = html;
+  v.oninput = () => { editing = true; };
+  v.querySelectorAll(".gallery button").forEach(b => b.onclick = async () => {
+    if (!confirm("Remove this image from the project? Scenes that used it get new keyframes on the next render.")) return;
+    const res = await api(`/api/project/${current}/references/remove`, {id:b.dataset.rid});
+    if (res.error) alert(res.error); editing = false; loadProject(true);
+  });
+  $("addFile").onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    const kind = $("addKind").value, name = $("addName").value.trim();
+    if (!name) { alert("Please enter a name first."); e.target.value = ""; return; }
+    if (kind === "person" && !$("addConsent").checked) { alert("Please confirm that the person agreed to appear in the video."); e.target.value = ""; return; }
+    const up = await upload(f);
+    if (up.error) { alert(up.error); return; }
+    const res = await api(`/api/project/${current}/references`, {token:up.token, kind, name, description:$("addDesc").value, consent:$("addConsent").checked});
+    if (res.error) alert(res.error); editing = false; loadProject(true);
+  };
+  $("rerender").onclick = async () => {
+    const shots = [...v.querySelectorAll(".shot")].map(el => {
+      const o = {id:el.dataset.id, narration:el.querySelector(".n").value, visual:el.querySelector(".v").value,
+        motion:el.querySelector(".m").value, animate:el.querySelector(".a").value, refs:[...el.querySelectorAll(".r:checked")].map(c => c.value)};
+      const sp = el.querySelector(".sp"); if (sp) { o.speaker = sp.value; o.on_screen = sp.value !== "narrator" && el.querySelector(".os").checked; }
+      return o;
+    });
+    const castEdits = [...v.querySelectorAll("#castBox .ref")].map(el => ({id:el.dataset.cid, look:el.querySelector(".lk").value, voice:el.querySelector(".vc").value}));
+    const res = await api(`/api/project/${current}/render`, {shots, cast:castEdits, style:$("edStyle").value,
+      motion:$("edMotion").value, ...($("edLipsync") ? {lipsync:$("edLipsync").value} : {})});
+    if (res.error) alert(res.error); editing = false; poll();
+  };
+}
+poll(); setInterval(poll, 2500);
+</script>
+</body>
+</html>

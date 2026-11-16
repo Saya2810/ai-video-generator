@@ -1,0 +1,29 @@
+[project]
+name = "aivs"
+version = "0.1.0"
+description = "AI Video Studio: self-hosted script/prompt -> narrated, edited video on Apple Silicon"
+license = { text = "MIT" }
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "mlx-audio==0.6.5",
+  "mlx-lm==0.32.2",
+  "mflux==0.24.0",
+  "misaki[en]",
+  "numpy",
+  "pillow",
+  "soundfile",
+]
+
+[project.scripts]
+aivs = "aivs.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["aivs", "aivs.workers", "aivs.web"]
+
+[tool.setuptools.package-data]
+"aivs.web" = ["*.html"]
+"aivs" = ["assets/fonts/*"]

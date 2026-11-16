@@ -1,0 +1,131 @@
+{
+  "title": "The Lighthouse's Promise",
+  "output": "./projects/leuchtturm/final.mp4",
+  "created": "2026-11-15 13:01:34",
+  "duration_s": 16.833,
+  "planned_duration_s": 16.833,
+  "video": {
+    "codec": "h264",
+    "width": 1080,
+    "height": 1920,
+    "fps": "30/1"
+  },
+  "audio": {
+    "codec": "aac",
+    "sample_rate": "48000",
+    "channels": 2
+  },
+  "size_mb": 12.49,
+  "loudness": {
+    "input_lufs": -24.68,
+    "output_lufs": -14.13,
+    "true_peak_db": -1.83,
+    "lra": 5.9,
+    "gain_db": 10.68,
+    "mode": "static gain + limiter"
+  },
+  "captions": 13,
+  "stage_seconds": {
+    "narration": 0.0,
+    "keyframes": 247.0,
+    "motion": 14.1,
+    "edit": 12.3
+  },
+  "total_seconds": 273.5,
+  "models": {
+    "planner": "mlx-community/Qwen3-4B-Instruct-2507-4bit",
+    "image": "Runpod/FLUX.2-klein-4B-mflux-4bit",
+    "stt": "mlx-community/whisper-large-v3-turbo-asr-fp16",
+    "tts": "chatterbox",
+    "motion": "parallax",
+    "reference_consistency": true
+  },
+  "shots": [
+    {
+      "id": "s01",
+      "narration": "Seit über hundert Jahren steht der alte Leuchtturm an der Küste und trotzt jedem Sturm.",
+      "visual": "Wide aerial shot of the lighthouse on a stormy coast, waves crashing, wind whipping through rocks, tower illuminated by red light",
+      "motion": "pan_down",
+      "narration_start_s": 1.05,
+      "narration_duration_s": 4.05,
+      "wer": 0.133,
+      "tts_take": 0,
+      "clip_start_s": 0.0,
+      "clip_duration_s": 5.767
+    },
+    {
+      "id": "s02",
+      "narration": "Nacht für Nacht schickt er sein Licht weit hinaus aufs Meer.",
+      "visual": "Low-angle close-up of the lighthouse beam cutting through dark ocean, reflecting on water, glowing like a thread of fire",
+      "motion": "push_in",
+      "narration_start_s": 5.8167,
+      "narration_duration_s": 2.73,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 5.267,
+      "clip_duration_s": 3.933
+    },
+    {
+      "id": "s03",
+      "narration": "Für die Seeleute ist es mehr als nur ein Signal.",
+      "visual": "Medium shot of a sailor standing at the edge of a dock, looking up at the lighthouse, eyes glistening with hope, sea breeze",
+      "motion": "pan_left",
+      "narration_start_s": 9.25,
+      "narration_duration_s": 2.21,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 8.7,
+      "clip_duration_s": 3.433
+    },
+    {
+      "id": "s04",
+      "narration": "Es ist das Versprechen, dass der Weg nach Hause noch da ist.",
+      "visual": "Over-the-shoulder view from a boat, night, the lighthouse beam illuminating a returning ship's path, warm light stretching across water",
+      "motion": "pull_out",
+      "narration_start_s": 12.1833,
+      "narration_duration_s": 2.78,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 11.633,
+      "clip_duration_s": 5.2
+    }
+  ],
+  "verification": {
+    "max_abs_sync_offset_ms": 0.0,
+    "mean_abs_sync_offset_ms": 0.0,
+    "min_match_confidence": 0.84,
+    "duration_error_ms": 0,
+    "wer_final_mix": 0.042,
+    "pass": true,
+    "lines": [
+      {
+        "id": "s01",
+        "planned_start_s": 1.05,
+        "detected_start_s": 1.05,
+        "offset_ms": -0.0,
+        "match_confidence": 0.853
+      },
+      {
+        "id": "s02",
+        "planned_start_s": 5.8167,
+        "detected_start_s": 5.8167,
+        "offset_ms": -0.0,
+        "match_confidence": 0.854
+      },
+      {
+        "id": "s03",
+        "planned_start_s": 9.25,
+        "detected_start_s": 9.25,
+        "offset_ms": -0.0,
+        "match_confidence": 0.861
+      },
+      {
+        "id": "s04",
+        "planned_start_s": 12.1833,
+        "detected_start_s": 12.1833,
+        "offset_ms": -0.0,
+        "match_confidence": 0.84
+      }
+    ]
+  }
+}

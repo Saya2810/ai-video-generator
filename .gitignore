@@ -1,0 +1,44 @@
+# --- Personal / generated data: never pushed -------------------------------
+# Video projects, uploaded photos and job logs (personal content, rendered output)
+projects/
+# Downloaded model weights and local environments (created by scripts/setup*.sh)
+models/
+envs/
+# Third-party checkouts fetched by the setup scripts (not redistributed)
+vendor/
+# Run logs and test output
+logs/
+test-results/
+# Local working notes (machine-specific paths)
+STATE.md
+# Local tool/IDE settings (dev-server config with local paths)
+.claude/
+# Convenience symlink created by scripts/setup.sh (points into envs/)
+bin/
+
+# --- Large binaries: keep out of git -----------------------------------------
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.safetensors
+*.pt
+*.pth
+*.onnx
+*.task
+*.npy
+!examples/fox-wan-raw-832x480.mp4
+
+# --- Python / build -----------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# --- macOS / editors ----------------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp

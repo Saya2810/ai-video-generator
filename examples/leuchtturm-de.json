@@ -1,0 +1,32 @@
+{
+  "title": "The Lighthouse's Promise",
+  "language": "de",
+  "recurring_subject": "An old lighthouse standing on a rocky coast, weathered stone, tall white tower with a green dome, flickering red light at the top",
+  "style": "cinematic photography, golden hour glow, soft long exposure, subtle fog, warm and melancholic atmosphere",
+  "shots": [
+    {
+      "id": "s01",
+      "narration": "Seit über hundert Jahren steht der alte Leuchtturm an der Küste und trotzt jedem Sturm.",
+      "visual": "Wide aerial shot of the lighthouse on a stormy coast, waves crashing, wind whipping through rocks, tower illuminated by red light",
+      "motion": "pan_down"
+    },
+    {
+      "id": "s02",
+      "narration": "Nacht für Nacht schickt er sein Licht weit hinaus aufs Meer.",
+      "visual": "Low-angle close-up of the lighthouse beam cutting through dark ocean, reflecting on water, glowing like a thread of fire",
+      "motion": "push_in"
+    },
+    {
+      "id": "s03",
+      "narration": "Für die Seeleute ist es mehr als nur ein Signal.",
+      "visual": "Medium shot of a sailor standing at the edge of a dock, looking up at the lighthouse, eyes glistening with hope, sea breeze",
+      "motion": "pan_left"
+    },
+    {
+      "id": "s04",
+      "narration": "Es ist das Versprechen, dass der Weg nach Hause noch da ist.",
+      "visual": "Over-the-shoulder view from a boat, night, the lighthouse beam illuminating a returning ship's path, warm light stretching across water",
+      "motion": "pull_out"
+    }
+  ]
+}

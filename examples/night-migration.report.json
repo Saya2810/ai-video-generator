@@ -1,0 +1,207 @@
+{
+  "title": "The Nightly Deep Sea Migration",
+  "output": "./projects/night-migration/final.mp4",
+  "created": "2026-11-15 13:08:47",
+  "duration_s": 36.667,
+  "planned_duration_s": 36.667,
+  "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1"
+  },
+  "audio": {
+    "codec": "aac",
+    "sample_rate": "48000",
+    "channels": 2
+  },
+  "size_mb": 23.01,
+  "loudness": {
+    "input_lufs": -24.01,
+    "output_lufs": -14.04,
+    "true_peak_db": -1.54,
+    "lra": 2.2,
+    "gain_db": 10.01,
+    "mode": "static gain + limiter"
+  },
+  "captions": 19,
+  "stage_seconds": {
+    "narration": 0.0,
+    "keyframes": 361.9,
+    "motion": 25.5,
+    "edit": 26.3
+  },
+  "total_seconds": 413.7,
+  "models": {
+    "planner": "mlx-community/Qwen3-4B-Instruct-2507-4bit",
+    "image": "Runpod/FLUX.2-klein-4B-mflux-4bit",
+    "stt": "mlx-community/whisper-large-v3-turbo-asr-fp16",
+    "tts": "kokoro",
+    "motion": "parallax",
+    "reference_consistency": false
+  },
+  "shots": [
+    {
+      "id": "s01",
+      "narration": "Beneath the waves, where sunlight fades, a silent tide stirs.",
+      "visual": "A vast underwater canyon at midnight, dark and silent, with faint bioluminescent tendrils drifting through the abyssal mud, light reflecting off the seafloor like scattered stars.",
+      "motion": "pan_left",
+      "narration_start_s": 1.05,
+      "narration_duration_s": 3.47,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 0.0,
+      "clip_duration_s": 5.2
+    },
+    {
+      "id": "s02",
+      "narration": "Every night, billions of creatures rise from the deep.",
+      "visual": "A swirling column of deep-sea creatures rising from 1000 meters below, glowing faintly in the dark, forming a slow-moving current of fish, squids, and crustaceans ascending through water column.",
+      "motion": "push_in",
+      "narration_start_s": 5.25,
+      "narration_duration_s": 2.83,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 4.7,
+      "clip_duration_s": 4.033
+    },
+    {
+      "id": "s03",
+      "narration": "They slip from the twilight zone, climbing toward the surface in a breathtaking wave of life.",
+      "visual": "A massive wave of translucent jellyfish and silvery fish surging upward from the twilight zone, bodies pulsing with soft blue and green light, forming a living tide against the dark ocean floor.",
+      "motion": "pan_up",
+      "narration_start_s": 8.7833,
+      "narration_duration_s": 4.76,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 8.233,
+      "clip_duration_s": 5.967
+    },
+    {
+      "id": "s04",
+      "narration": "No one sees it coming, but the ocean breathes with this ancient rhythm.",
+      "visual": "A lone deep-sea anglerfish glides silently through the dark, its light flickering like a dying lantern, surrounded by silent shadows that move like breath in the ocean’s dark exhalation.",
+      "motion": "pull_out",
+      "narration_start_s": 14.25,
+      "narration_duration_s": 3.76,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 13.7,
+      "clip_duration_s": 4.967
+    },
+    {
+      "id": "s05",
+      "narration": "Fish, squids, and jellyfish pulse through the dark, feeding on the moonlit surface.",
+      "visual": "Hundreds of glowing fish and squid swimming in synchronized pulses, their bodies shimmering with internal light, weaving through a translucent current toward the surface where moonlight filters through water.",
+      "motion": "push_in",
+      "narration_start_s": 18.7167,
+      "narration_duration_s": 4.2,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 18.167,
+      "clip_duration_s": 5.4
+    },
+    {
+      "id": "s06",
+      "narration": "This is the planet’s largest migration, unseen but unstoppable.",
+      "visual": "A sweeping aerial view of the ocean surface at night, revealing a shimmering blanket of floating creatures rising in a spiral wave, their bioluminescence reflecting off the moonlit water like stars.",
+      "motion": "pan_right",
+      "narration_start_s": 23.6167,
+      "narration_duration_s": 3.84,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 23.067,
+      "clip_duration_s": 5.067
+    },
+    {
+      "id": "s07",
+      "narration": "In the quiet of the night, the sea remembers how to live.",
+      "visual": "A single squid, its body pulsing with soft blue, slowly ascends through a dark column of water, its trail glowing faintly behind it, like a silent beacon in the deep ocean's breath.",
+      "motion": "pan_down",
+      "narration_start_s": 28.1833,
+      "narration_duration_s": 2.75,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 27.633,
+      "clip_duration_s": 3.967
+    },
+    {
+      "id": "s08",
+      "narration": "And in that rise, the ocean whispers: we are all connected.",
+      "visual": "A vast, interconnected network of creatures rising in unison from the deep, their lights blending into a single glowing river that flows upward, merging with the night sky above, ocean and sky breathing together.",
+      "motion": "pull_out",
+      "narration_start_s": 31.65,
+      "narration_duration_s": 3.16,
+      "wer": 0.0,
+      "tts_take": 0,
+      "clip_start_s": 31.1,
+      "clip_duration_s": 5.567
+    }
+  ],
+  "verification": {
+    "max_abs_sync_offset_ms": 0.0,
+    "mean_abs_sync_offset_ms": 0.0,
+    "min_match_confidence": 0.896,
+    "duration_error_ms": 0,
+    "wer_final_mix": 0.0,
+    "pass": true,
+    "lines": [
+      {
+        "id": "s01",
+        "planned_start_s": 1.05,
+        "detected_start_s": 1.05,
+        "offset_ms": -0.0,
+        "match_confidence": 0.899
+      },
+      {
+        "id": "s02",
+        "planned_start_s": 5.25,
+        "detected_start_s": 5.25,
+        "offset_ms": -0.0,
+        "match_confidence": 0.906
+      },
+      {
+        "id": "s03",
+        "planned_start_s": 8.7833,
+        "detected_start_s": 8.7833,
+        "offset_ms": -0.0,
+        "match_confidence": 0.903
+      },
+      {
+        "id": "s04",
+        "planned_start_s": 14.25,
+        "detected_start_s": 14.25,
+        "offset_ms": -0.0,
+        "match_confidence": 0.907
+      },
+      {
+        "id": "s05",
+        "planned_start_s": 18.7167,
+        "detected_start_s": 18.7167,
+        "offset_ms": -0.0,
+        "match_confidence": 0.905
+      },
+      {
+        "id": "s06",
+        "planned_start_s": 23.6167,
+        "detected_start_s": 23.6167,
+        "offset_ms": -0.0,
+        "match_confidence": 0.896
+      },
+      {
+        "id": "s07",
+        "planned_start_s": 28.1833,
+        "detected_start_s": 28.1833,
+        "offset_ms": -0.0,
+        "match_confidence": 0.903
+      },
+      {
+        "id": "s08",
+        "planned_start_s": 31.65,
+        "detected_start_s": 31.65,
+        "offset_ms": -0.0,
+        "match_confidence": 0.902
+      }
+    ]
+  }
+}
